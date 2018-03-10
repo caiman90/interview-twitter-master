@@ -16,7 +16,7 @@ export class TweetService {
     return this.http.get<TweetModel[]>(ENDPOINT_BASE);
   }
 
-  fetchForUser(username: string) {
+  fetchForUser(username: string): Observable<TweetModel[]> {
     return this.http.get<TweetModel[]>(ENDPOINT_BASE + '/' + username);
   }
   fetchProfileDetails(): Observable<ProfileModel> {

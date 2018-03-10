@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TweetService} from "../../../services/tweet/tweet.service";
 import {Observable} from "rxjs/Observable";
 import {ProfileModel} from "../../../models/profile.model";

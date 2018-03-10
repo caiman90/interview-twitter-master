@@ -10,4 +10,8 @@ export class UserTweetsTableComponent {
 
   @Input() tweets: TweetModel[];
 
+    @Input('addTweet')
+    addTweet(event) {
+     this.tweets.push(event);
+    }
 }
