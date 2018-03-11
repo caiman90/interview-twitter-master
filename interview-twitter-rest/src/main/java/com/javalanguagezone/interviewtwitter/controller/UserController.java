@@ -3,11 +3,12 @@ package com.javalanguagezone.interviewtwitter.controller;
 import com.javalanguagezone.interviewtwitter.service.UserService;
 import com.javalanguagezone.interviewtwitter.service.dto.TweetDTO;
 import com.javalanguagezone.interviewtwitter.service.dto.UserDTO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Collection;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 public class UserController {
@@ -28,4 +29,9 @@ public class UserController {
     return userService.getUsersFollowing(principal);
   }
 
+  @PostMapping("/auth/register")
+  @ResponseStatus(CREATED)
+  public UserDTO register(@RequestBody UserDTO userDto) {
+    return userService.createUser(userDto);
+  }
 }

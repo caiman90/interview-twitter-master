@@ -60,4 +60,9 @@ public class UserService implements UserDetailsService {
   private UserDTO convertUserToDTO(User user) {
     return new UserDTO(user);
   }
+
+  public UserDTO createUser(UserDTO userDTO){
+    User user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getFirstName(),userDTO.getLastName());
+    return new UserDTO(userRepository.save(user));
+  }
 }
