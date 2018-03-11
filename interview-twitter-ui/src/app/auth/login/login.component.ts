@@ -39,4 +39,7 @@ export class LoginComponent {
     const passwordFormControl = loginForm.form.controls['password'];
     return loginForm.submitted && passwordFormControl && !passwordFormControl.valid;
   }
+  register() {
+    this.router.navigate(['/register']);
+  }
 }

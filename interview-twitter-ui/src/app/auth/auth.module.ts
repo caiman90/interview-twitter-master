@@ -9,6 +9,10 @@ import {AuthGuard} from "./auth.guard";
 import {LoginContainerComponent} from "./login-container/login-container.component";
 import {LoginComponent} from "./login/login.component";
 import {AuthRoutingModule} from "./auth-routing.module";
+import {RegisterComponent} from "./register/register.component";
+import {MainComponent} from './main/main.component';
+import {RegisterContainerComponent} from "./register-container/register-container.component";
+import {RegisterService} from "../services/register.service";
 
 @NgModule({
   imports: [
@@ -26,10 +30,14 @@ import {AuthRoutingModule} from "./auth-routing.module";
     },
     AuthGuard,
     AuthService,
+    RegisterService
   ],
   declarations: [
+    MainComponent,
     LoginComponent,
     LoginContainerComponent,
+    RegisterComponent,
+    RegisterContainerComponent
   ],
 })
 export class AuthModule {

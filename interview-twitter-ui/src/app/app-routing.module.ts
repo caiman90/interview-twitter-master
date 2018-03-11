@@ -8,7 +8,7 @@ const routes: Routes = [
     loadChildren: 'app/twitter/twitter.module#TwitterModule', canActivate: [AuthGuard]
   },
   {
-    path: 'login',
+    path: '',
     loadChildren: 'app/auth/auth.module#AuthModule',
   }
 ];
