@@ -11,6 +11,8 @@
         </li>
         <li routerLinkActive="active"><a routerLink="profile">Profile</a>
         </li>
+        <li routerLinkActive="active"><a routerLink="users">Users</a>
+        </li>
         <li *ngIf="!!getCurrentUser()"  routerLinkActive="active" (click)="logout()"><a>Logout</a>
         </li>
       </ul>

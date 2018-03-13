@@ -18,6 +18,7 @@ public class UserDTO {
   private int numOfTweets;
   private int numOfFollowers;
   private int numOfFollowing;
+  private boolean following;
 
   public UserDTO(User user) {
     this.id = user.getId();
@@ -31,4 +32,6 @@ public class UserDTO {
   public void setNumOfTweets(int numOfTweets) {
     this.numOfTweets = numOfTweets;
   }
+  public void setFollowing(boolean following) { this.following = following; }
+
 }

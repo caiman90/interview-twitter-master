@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -29,9 +30,16 @@ public class UserController {
     return userService.getUsersFollowing(principal);
   }
 
+  @PostMapping("/followUser")
+  public String followUser(@RequestBody UserDTO userDto,Principal principal) { return userService.followUser(userDto,principal); }
+
+  @PostMapping("/unfollowUser")
+  public String unfollowUser(@RequestBody UserDTO userDto,Principal principal) { return userService.unfollowUser(userDto,principal); }
+
+  @GetMapping("/allUsers")
+  public List<UserDTO> allUsers(Principal principal) { return userService.getAllUsers(principal); }
+
   @PostMapping("/auth/register")
   @ResponseStatus(CREATED)
-  public UserDTO register(@RequestBody UserDTO userDto) {
-    return userService.createUser(userDto);
-  }
+  public UserDTO register(@RequestBody UserDTO userDto) { return userService.createUser(userDto); }
 }

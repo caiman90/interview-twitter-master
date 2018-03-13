@@ -1,5 +1,6 @@
 package com.javalanguagezone.interviewtwitter.service;
 
+import com.javalanguagezone.interviewtwitter.InterviewTwitterApplication;
 import com.javalanguagezone.interviewtwitter.domain.User;
 import com.javalanguagezone.interviewtwitter.repository.TweetRepository;
 import com.javalanguagezone.interviewtwitter.repository.UserRepository;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import java. util. Iterator;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
@@ -40,29 +42,70 @@ public class UserService implements UserDetailsService {
     return convertUsersToDTOs(user.getFollowing());
   }
 
+  public List<UserDTO> getAllUsers(Principal principal){
+    Collection<User> users = userRepository.findAll();
+    return  mapFollowingToAllUsers(convertCollectionOfUsersToDTOs(users),principal);
+  }
   @Transactional
   public Collection<UserDTO> getUsersFollowers(Principal principal) {
     User user = getUser(principal.getName());
     return convertUsersToDTOs(user.getFollowers());
   }
-
+  @Transactional
+  public String followUser(UserDTO user,Principal principal){
+    User currentUser = getUser(principal.getName());
+    User userToAdd = getUser(user.getUsername());
+    currentUser.getFollowing().add(userToAdd);
+    userRepository.save(currentUser);
+    return "You are now following user" + user.getFullName();
+  }
+  @Transactional
+  public String unfollowUser(UserDTO user,Principal principal){
+    User currentUser = getUser(principal.getName());
+    Iterator<User> iterator = currentUser.getFollowing().iterator();
+    while (iterator.hasNext()) {
+      User followingUser = iterator.next();
+      if (followingUser.getId() == user.getId()) {
+        iterator.remove();
+      }
+    }
+    userRepository.save(currentUser);
+    return "You unfollowed user" + user.getFullName();
+  }
   public UserDTO getUserDetails(Principal principal) {
     User user = getUser(principal.getName());
     return convertUserToDTO(user);
   }
+  public UserDTO createUser(UserDTO userDTO){
+    User user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getFirstName(),userDTO.getLastName());
+    return new UserDTO(userRepository.save(user));
+  }
+
   private User getUser(String username) {
     return userRepository.findOneByUsername(username);
   }
-
   private List<UserDTO> convertUsersToDTOs(Set<User> users) {
+    return users.stream().map(UserDTO::new).collect(toList());
+  }
+  private List<UserDTO> convertCollectionOfUsersToDTOs(Collection<User> users) {
     return users.stream().map(UserDTO::new).collect(toList());
   }
   private UserDTO convertUserToDTO(User user) {
     return new UserDTO(user);
   }
+  private List<UserDTO> mapFollowingToAllUsers(List<UserDTO> users,Principal principal){
+    User loggedInUser = getUser(principal.getName());
+    List<UserDTO> userFollowers = convertUsersToDTOs(loggedInUser.getFollowing());
+    for(UserDTO user : userFollowers){
+      for(UserDTO user2: users){
+        if(user.getId() == user2.getId()){
+            user2.setFollowing(true);
+            break;
+        }
+      }
 
-  public UserDTO createUser(UserDTO userDTO){
-    User user = new User(userDTO.getUsername(),userDTO.getPassword(),userDTO.getFirstName(),userDTO.getLastName());
-    return new UserDTO(userRepository.save(user));
+    }
+    return users;
   }
+
 }
