@@ -43,8 +43,10 @@ public class UserService implements UserDetailsService {
   }
 
   public List<UserDTO> getAllUsers(Principal principal){
+    User loggedInUser = getUser(principal.getName());
     Collection<User> users = userRepository.findAll();
-    return  mapFollowingToAllUsers(convertCollectionOfUsersToDTOs(users),principal);
+    iterateAndRemoveParticularUser(users.iterator(),loggedInUser);
+    return mapFollowingToAllUsers(convertCollectionOfUsersToDTOs(users),principal);
   }
   @Transactional
   public Collection<UserDTO> getUsersFollowers(Principal principal) {
@@ -63,12 +65,7 @@ public class UserService implements UserDetailsService {
   public String unfollowUser(UserDTO user,Principal principal){
     User currentUser = getUser(principal.getName());
     Iterator<User> iterator = currentUser.getFollowing().iterator();
-    while (iterator.hasNext()) {
-      User followingUser = iterator.next();
-      if (followingUser.getId() == user.getId()) {
-        iterator.remove();
-      }
-    }
+    iterateAndRemoveParticularUser(iterator,currentUser);
     userRepository.save(currentUser);
     return "You unfollowed user" + user.getFullName();
   }
@@ -106,6 +103,14 @@ public class UserService implements UserDetailsService {
 
     }
     return users;
+  }
+  private void iterateAndRemoveParticularUser(Iterator<User> iterator, User user){
+    while (iterator.hasNext()) {
+      User itrUser = iterator.next();
+      if (itrUser.getId() == user.getId()) {
+        iterator.remove();
+      }
+    }
   }
 
 }
