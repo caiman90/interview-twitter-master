@@ -39,7 +39,7 @@ public class UserController {
   @GetMapping("/allUsers")
   public List<UserDTO> allUsers(Principal principal) { return userService.getAllUsers(principal); }
 
-  @PostMapping("/auth/register")
+  @PostMapping("/register")
   @ResponseStatus(CREATED)
   public UserDTO register(@RequestBody UserDTO userDto) { return userService.createUser(userDto); }
 }

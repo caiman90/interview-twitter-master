@@ -10,7 +10,7 @@ export class RegisterService {
   constructor(private http: HttpClient) {
   }
   register(user) {
-    return this.http.post<any>(AUTH_ENDPOINT + 'auth/register', user);
+    return this.http.post<any>(AUTH_ENDPOINT + '/register', user);
   }
   getFollowers(): Observable<any[]> {
     return this.http.get<any>(AUTH_ENDPOINT + '/followers');
